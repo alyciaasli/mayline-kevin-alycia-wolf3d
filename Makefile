@@ -1,0 +1,114 @@
+# *********************************************************************************************************** #
+#                                                                                                             #
+#                                                               :::::::::: ::::::::   :::::::: :::::::::::    #
+#    Makefile                                                  :+:       :+:    :+: :+:    :+:    :+:         #
+#                                                             +:+       +:+        +:+           +:+          #
+#    By: asli-alycia <asli-alycia@myges.fr>                  +#++:++#  +#++:++#++ :#:           +#+           #
+#                                                           +#+              +#+ +#+   +#+#    +#+            #
+#    Created: 2025/11/20 16:15:06 by asli-alycia           #+#       #+#    #+# #+#    #+#    #+#             #
+#    Updated: 2025/11/20 16:15:06 by asli-alycia          ########## ########   ######## ###########          #
+#                                                                                                             #
+# *********************************************************************************************************** #
+
+CC      ?= gcc
+RM      ?= rm -f
+FIND    = find
+ECHO    = echo -e
+
+SRC_DIR     = src
+INCLUDE_DIR = include
+
+NAME        = wolf3d
+
+BLACK       = \033[0;30m
+RED         = \033[0;31m
+GREEN       = \033[0;32m
+YELLOW      = \033[0;33m
+BLUE        = \033[0;34m
+MAGENTA     = \033[0;35m
+CYAN        = \033[0;36m
+WHITE       = \033[0;37m
+BOLD        = \033[1m
+RESET       = \033[0m
+
+CFLAGS      ?= -Wall -Wextra -iquote $(INCLUDE_DIR)
+LDFLAGS     ?= -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio -lm
+
+DEBUG_FLAGS    ?= -g3 -DDEBUG
+
+SRC_CORE = 
+
+SRC_MENU = 
+
+SRC_ENGINE = 
+
+SRC_PARSING = 
+
+SRC_WEAPON = 
+
+SRC_ENEMY = 
+
+SRC = $(addprefix $(SRC_DIR)/, $(SRC_CORE) \
+    $(SRC_MENU) $(SRC_ENGINE) $(SRC_PARSING) $(SRC_WEAPON) $(SRC_ENEMY))
+
+MAIN = main.c
+
+OBJ         = $(SRC:.c=.o)
+MAIN_OBJ    = $(MAIN:.c=.o)
+
+all: intro $(NAME) outro
+
+intro:
+	@$(ECHO) "$(YELLOW)===============================================$(RESET)"
+	@$(ECHO) "$(GREEN)➤ Building Wolf3D project$(RESET)"
+	@$(ECHO) "$(YELLOW)===============================================$(RESET)"
+
+outro:
+	@$(ECHO) "$(GREEN)$(BOLD)  🎮 WOLF3D successfully built! 🎮$(RESET)"
+	@$(ECHO) "$(CYAN)  Run with: $(WHITE)./$(NAME) map/[map_file]$(RESET)"
+
+$(NAME): $(MAIN_OBJ) $(OBJ)
+	@$(ECHO) "$(YELLOW)⚡ Linking executable: $(CYAN)$@$(RESET)"
+	@$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	@$(ECHO) "$(GREEN)✓ Build complete!$(RESET)"
+
+debug: CFLAGS += $(DEBUG_FLAGS)
+debug: clean intro $(NAME)
+	@$(ECHO) "$(GREEN)✓ Debug build complete!$(RESET)"
+
+coverage: CFLAGS += --coverage $(DEBUG_FLAGS)
+coverage: LDFLAGS += --coverage
+coverage: clean
+	@$(ECHO) "$(YELLOW)Building with coverage instrumentation...$(RESET)"
+	@$(MAKE) -s $(NAME)
+	@$(ECHO) "$(GREEN)✓ Coverage build complete!$(RESET)"
+
+tests_run: coverage
+	@$(ECHO) "$(YELLOW)Running unit tests...$(RESET)"
+	@$(ECHO) "$(YELLOW)No unit tests implemented yet$(RESET)"
+	@gcovr --exclude tests/ -s || true
+	@$(ECHO) "$(GREEN)✓ Tests completed!$(RESET)"
+
+%.o: %.c
+	@$(ECHO) "$(BLUE)Compiling: $(WHITE)$<$(RESET)"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@$(ECHO) "$(RED)🧹 Cleaning object files...$(RESET)"
+	@$(FIND) . -name "*.o" -delete
+	@$(ECHO) "$(GREEN)✓ Object files removed.$(RESET)"
+
+fclean: clean
+	@$(ECHO) "$(RED)╔══════════════════════════════════════╗$(RESET)"
+	@$(ECHO) "$(RED)║         FULL CLEANUP WIZARD          ║$(RESET)"
+	@$(ECHO) "$(RED)╚══════════════════════════════════════╝$(RESET)"
+	@$(ECHO) "$(YELLOW)➤ $(CYAN)Removing coverage files...$(RESET)"
+	@$(ECHO) "$(YELLOW)➤ $(CYAN)Removing executable and debug files...$(RESET)"
+	@$(RM) $(NAME) a.out vgcore*
+	@$(ECHO) "$(GREEN)╔══════════════════════════════════════╗$(RESET)"
+	@$(ECHO) "$(GREEN)║       CLEANUP COMPLETE! (100%)       ║$(RESET)"
+	@$(ECHO) "$(GREEN)╚══════════════════════════════════════╝$(RESET)"
+
+re: fclean all
+
+.PHONY: make all debug coverage tests_run clean fclean re help intro outro
