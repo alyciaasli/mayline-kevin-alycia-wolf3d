@@ -36,9 +36,12 @@ LDFLAGS     ?= -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio -lm
 
 DEBUG_FLAGS    ?= -g3 -DDEBUG
 
-SRC_CORE = 
+SRC_CORE = display_level_state.c
 
-SRC_MENU = 
+SRC_MENU = menu/menu.c menu/menu_manager.c menu/button.c menu/menu_music.c \
+		   menu/setting/setting_main.c menu/setting/setting_ui.c \
+		   menu/setting/setting_events.c menu/setting/setting_volume.c \
+		   menu/utils.c
 
 SRC_ENGINE = 
 
