@@ -36,16 +36,24 @@ LDFLAGS     ?= -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio -lm
 
 DEBUG_FLAGS    ?= -g3 -DDEBUG
 
-SRC_CORE = display_level_state.c
+SRC_CORE = display_window.c fps.c init_wolf3d.c init_view.c \
+           game_core.c game_loop.c game_events.c display_level_state.c \
+		   render_elements.c \
 
 SRC_MENU = menu/menu.c menu/menu_manager.c menu/button.c menu/menu_music.c \
 		   menu/setting/setting_main.c menu/setting/setting_ui.c \
 		   menu/setting/setting_events.c menu/setting/setting_volume.c \
 		   menu/utils.c
 
-SRC_ENGINE = 
+SRC_ENGINE = look/initialize_engine.c look/player_movement.c \
+             look/raycasting_implementation.c look/wall_projection.c \
+             look/textures.c look/texture_sprites.c look/wall_renderer.c \
+			 look/raycasting_core.c look/floor_ceiling_rendering.c \
+			 look/flashlight.c \
 
-SRC_PARSING = 
+SRC_PARSING = parsing/free_map.c parsing/map_dimension.c parsing/map_memory.c \
+              parsing/map_reader.c parsing/map_loader.c \
+			  parsing/map_character.c parsing/save_map.c \
 
 SRC_WEAPON = 
 
