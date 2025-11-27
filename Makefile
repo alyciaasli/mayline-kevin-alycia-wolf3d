@@ -55,14 +55,23 @@ SRC_PARSING = parsing/free_map.c parsing/map_dimension.c parsing/map_memory.c \
               parsing/map_reader.c parsing/map_loader.c \
 			  parsing/map_character.c parsing/save_map.c \
 
-SRC_WEAPON = 
+SRC_WEAPON = fight/weapon.c fight/weapon_animation.c \
+			 fight/weapon_animation_render.c fight/manage_projectile.c \
+			 fight/crosshair_animation.c fight/manage_shoot.c \
+			 fight/health_animation.c fight/manage_health.c \
+			 fight/init_health.c
 
-SRC_ENEMY = 
+SRC_ENEMY = enemy/enemy.c enemy/enemy_manager.c enemy/map_enemy.c \
+            enemy/enemy_behavior.c enemy/enemy_movement.c enemy/enemy_calc.c \
+            enemy/init_ennemi.c enemy/enemy_states.c \
+            enemy/animation/enemy_animation.c \
+            enemy/animation/animation_init.c \
+            enemy/animation/animation_loader.c enemy/enemy_render.c
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_CORE) \
     $(SRC_MENU) $(SRC_ENGINE) $(SRC_PARSING) $(SRC_WEAPON) $(SRC_ENEMY))
 
-MAIN = main.c
+MAIN = src/main.c
 
 OBJ         = $(SRC:.c=.o)
 MAIN_OBJ    = $(MAIN:.c=.o)
